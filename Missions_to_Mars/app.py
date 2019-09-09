@@ -1,31 +1,52 @@
-from flask import Flask, render_template, redirect
-from flask_pymongo import PyMongo
+from flask import Flask, render_template, request
+import pymongo
 import scrape_mars
 
-# Create an instance of Flask
-app = Flask(__name__)
 
-# Use PyMongo to establish Mongo connection
-mongo = PyMongo(app, uri="mongodb://localhost:5000/mars_app")
+app = Flask(__name__, template_folder='template')
+
+# setup mongo connection
+conn = "mongodb://localhost:27017"
+client = pymongo.MongoClient(conn)
+
+# connect to mongo db and collection
+db = client.mars_data
+collection = db.mars_data
 
 
 # Route to render index.html template using data from Mongo
 @app.route("/")
 def index():
-    try:
-        mars_data = mongo.db.mars_data.find_one()
-        return render_template("index.html", mars_data=mars_data)
-    except:
-        return redirect("http://localhost:5000/scrape", code=302)
+
+    # Find one record of data from the mongo database
+    mars_data = db.collection.find_one()
+
+    # Return template and data
+    return render_template("index.html", mars_data=mars_data)
 
 
 # Route that will trigger the scrape function
 @app.route("/scrape")
 def scrape():
-    mars_data = mongo.db.mars_data
-    mars_data_scrape = scrape_mars.scrape()
-    mars_data.update({}, mars_data_scrape, upsert=True)
-    return redirect("http://localhost:5000/", code=302)
+
+    # Run the scrape function
+    mars_data = scrape_mars.scrape_info()
+
+    # Update the Mongo database using update and upsert=True
+    mongo.db.collection.update({}, mars_data, upsert=True)
+
+    # Redirect back to home page
+    return redirect("/")
+
+
+# helper route to shutdown server
+@app.route('/shutdown')
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return 'Shutting down Flask server...'
 
 if __name__ == "__main__":
     app.run(debug=True)
