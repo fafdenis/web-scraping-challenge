@@ -139,12 +139,12 @@ def scrape():
 
     # Store data in a dictionary
     mars_data = {
-        "News_Title": news_title,
-        "News_Paragraph": news_p,
-        "Featured_Image": featured_image_url,
-        "Mars_Weather": mars_weather,
-        "Mars_Facts": mars_facts,
-        "Hemisphere_Image": hemisphere_image_urls
+        "news_title": news_title,
+        "news_p": news_p,
+        "featured_image_url": featured_image_url,
+        "mars_weather": mars_weather,
+        "mars_facts": mars_facts,
+        "hemisphere_image_urls": hemisphere_image_urls
     }
 
     # Close the browser after scraping

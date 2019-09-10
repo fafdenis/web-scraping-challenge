@@ -3,7 +3,7 @@ from flask_pymongo import PyMongo
 import scrape_mars
 
 
-app = Flask(__name__, template_folder='template')
+app = Flask(__name__)
 
 app.config['MONGO_URI'] = "mongodb://localhost:27017/mars_data"
 mongo = PyMongo(app)
@@ -29,15 +29,6 @@ def scrape():
     # Update the Mongo database using update and upsert=True
     mongo.db.mars_data.update({}, mars_data, upsert=True)
     return 'All done!'
-
-# helper route to shutdown server
-@app.route('/shutdown')
-def shutdown_server():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
-    return 'Shutting down Flask server...'
 
 if __name__ == "__main__":
     app.run(debug=True)

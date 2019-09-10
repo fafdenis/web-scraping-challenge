@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mission to Mars</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header with primary button to refresh data -->
+  <div class="container-fluid">
+      <div class="jumbotron text-center">
+        <h1><b>Mission to Mars</b></h1>
+        <a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a>
+      </div>
+  </div>
+
+  <!-- New section with latest news -->
+  <div class="row">
+      <div class="col-md-12">
+        <div class="media">
+          <div class="media-body">
+            <h3><b>Latest Mars News</b></h3>
+            <h4 class="heading">{{mars_data.news_title}}</h4>
+            <p>{{mars_data.news_p}}</p>
+            <hr class="my-4">
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- New section divided into two columns -->
+  <div class="row">
+
+  <!-- Left Side -->
+  <!-- Row for Featured Mars Image -->  
+    <div class="col-md-8">
+      <h3><b>Featured Mars Image</b></h3>
+      <img src={{mars_data.featured_image_url}} height=auto width=750px>
+    </div>
+
+    <!-- Right Side is divided into two rows -->
+    <!-- Row for Mars Weather Tweet -->
+    <div class="col-md-4">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4><b>Current Weather on Mars</b></h4>
+              {{mars_data.mars_weather}}
+              <hr class="my-4">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row for Mars Facts HTML data -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <h4><b>Mars Facts</b></h4>
+              <p>{{mars_data.mars_facts | safe}}</p>
+            </div>
+          </div>
+        </div>
+      </div>       
+    </div>
+  </div>
+
+  <!-- New Section is divided into a 2x2 panel for Hemisphere Images -->
+  <div class="row" style="margin-top:80px;">
+    <div class="page-header">
+      <h2 class="text-center"><b>Mars Hemispheres</b></h2>
+    </div>
+    <!-- Loop through hemispheres dictionary with images and titles -->
+    {% for hemisphere in mars_data.hemisphere_image_urls %}
+      <div class="col-md-6">
+        <div class="thumbnail">
+          <img src="{{hemisphere.img_url}}">
+        <div class="caption">
+          <h3><b>{{hemisphere.title}}</b></h3>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
