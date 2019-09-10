@@ -96,10 +96,10 @@ def scrape():
     mars_facts.columns = ['Description','Value']
 
     # Reset Index to be description
-    mars_facts = mars_facts.set_index('Description', inplace=True)
-    
+    mars_facts = mars_facts.set_index('Description')
+
     # Use Pandas to convert the data to a HTML table string
-    mars_facts.to_html('table.html')
+    mars_facts = mars_facts.to_html(classes="table table-striped")
 
     #
     ### Mars Hemispheres
@@ -117,7 +117,7 @@ def scrape():
     hemisphere_image_urls = []
 
     # Retrieve all elements that contain image information
-    reults = soup.find("div", class_ = "result-list" )
+    results = soup.find("div", class_ = "result-list" )
     hemispheres = results.find_all("div", class_="item")
 
     # Iterate through each image
@@ -152,3 +152,6 @@ def scrape():
 
     # Return results
     return mars_data
+
+if __name__ == '__main__':
+    scrape()
